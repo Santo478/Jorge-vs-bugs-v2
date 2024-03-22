@@ -6,7 +6,7 @@ import pygame
 import random
 from pygame.locals import (RLEACCEL)
 
-BUGpng = pygame.image.load('assets/bug.png').convert_alpha()
+BUGpng = pygame.image.load('assets/skins/bugs/bug.png').convert_alpha()
 BUGpng_scaled = pygame.transform.scale(BUGpng, (64,64))
 
 

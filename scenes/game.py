@@ -15,16 +15,16 @@ SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 700
 
 '''cargar musica'''
-pygame.mixer.music.load('assets/8bitmusic.mp3')
+pygame.mixer.music.load('assets/audio/Music/8bitmusic.mp3')
 pygame.mixer.music.set_volume(0.1)
 pygame.mixer.music.play(-1, 0, 1000)
 
-menu_sound = pygame.mixer.Sound('assets/MenuSound.wav')
+menu_sound = pygame.mixer.Sound('assets/audio/Sound/MenuSound.wav')
 menu_sound.set_volume(0.2)
 
 ''' 2.- crear el objeto pantalla'''
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-background_image1 = pygame.image.load('assets/pixelBackground.png').convert()
+background_image1 = pygame.image.load('assets//Backgrounds/pixelBackground.png').convert()
 background_image = pygame.transform.scale(background_image1, (1000,700))
 
 

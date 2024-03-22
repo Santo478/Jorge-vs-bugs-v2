@@ -7,7 +7,7 @@ from pygame.locals import (
     K_UP, K_DOWN, K_LEFT, K_RIGHT, RLEACCEL)
 
 
-JorgePNG = pygame.image.load('assets/JorgeVJ.png').convert_alpha()
+JorgePNG = pygame.image.load('assets/skins/jorge/JorgeVJ.png').convert_alpha()
 JorgePNG_scaled = pygame.transform.scale(JorgePNG, (80,80))
 
 class Player(pygame.sprite.Sprite):
