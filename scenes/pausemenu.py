@@ -8,7 +8,7 @@ sound = pygame.mixer.Sound('assets/audio/Sound/ExitpauseMenu.wav')
 sound.set_volume(0.2)
 
 def PauseMenu(screen):
-
+    from .main_menu import MainMenu
     pygame.display.set_caption("Pause Menu")
     '''Cambiar musica'''
     pygame.mixer.music.pause()
@@ -18,8 +18,10 @@ def PauseMenu(screen):
     ResumeImg = pygame.image.load('assets/Buttons/ResumeButton.png').convert_alpha()
     resume_button = Button(500, 300, ResumeImg)
 
-    QuitImg = pygame.image.load('assets/Buttons/QuitButton.png').convert_alpha()
-    quit_button = Button(500, 450, QuitImg)
+    MainMenuImg = pygame.image.load('assets/Buttons/MainMenuButton.png').convert_alpha()
+    main_menu_button = Button(500, 450, MainMenuImg)
+
+    
 
     run = True
 
@@ -29,11 +31,11 @@ def PauseMenu(screen):
         if resume_button.draw(screen):
             sound.play()
             pygame.time.delay(150)
-            break
+            return
 
-        if quit_button.draw(screen):
-            pygame.quit()
-
+        if main_menu_button.draw(screen):
+            return
+        
         for event in pygame.event.get():
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
@@ -42,6 +44,7 @@ def PauseMenu(screen):
                     return
 
             elif event.type == QUIT:
+                pygame.display.quit()
                 pygame.quit()
         
         pygame.display.update()

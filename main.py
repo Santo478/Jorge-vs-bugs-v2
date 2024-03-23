@@ -2,8 +2,8 @@
 Hola este es modulo principal,
 el codigo que al ejecutar pondra en marcha nuestro juego
 """
-import scenes.game as GameScene
+import scenes.main_menu as GameScene
 
 '''Inicio la escena de mi juego'''
-GameScene.StartScene()
+GameScene.MainMenu()
 

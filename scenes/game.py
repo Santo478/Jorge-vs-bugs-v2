@@ -15,25 +15,29 @@ SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 700
 
 '''cargar musica'''
-pygame.mixer.music.load('assets/audio/Music/8bitmusic.mp3')
-pygame.mixer.music.set_volume(0.1)
-pygame.mixer.music.play(-1, 0, 1000)
 
-menu_sound = pygame.mixer.Sound('assets/audio/Sound/MenuSound.wav')
-menu_sound.set_volume(0.2)
 
 ''' 2.- crear el objeto pantalla'''
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 background_image1 = pygame.image.load('assets//Backgrounds/pixelBackground.png').convert()
 background_image = pygame.transform.scale(background_image1, (1000,700))
 
 
-def StartScene():
+def StartScene(screen):
 
     '''play music'''
 
+    pygame.mixer.music.load('assets/audio/Music/8bitmusic.mp3')
+    pygame.mixer.music.set_volume(0.1)
+    pygame.mixer.music.play(-1, 0, 1000)
+
+
+    menu_sound = pygame.mixer.Sound('assets/audio/Sound/MenuSound.wav')
+    menu_sound.set_volume(0.2)
+
     from elements.jorge import Player
     from elements.bug import Enemy
+    from .death_screen import DeathScreen
+
     pygame.display.set_caption("Game")
     clock = pygame.time.Clock()
     ''' 2.- generador de enemigos'''
@@ -52,9 +56,14 @@ def StartScene():
     
     ''' hora de hacer el gameloop '''
     running = True
+    music_playing = False
 
     while running:
-        pygame.mixer.music.unpause()
+        if music_playing:
+            pygame.mixer.music.unpause()
+        else:
+            pygame.mixer.music.play(-1, 0, 1000)
+            music_playing = True
         for event in pygame.event.get():
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
@@ -62,7 +71,8 @@ def StartScene():
                     PauseMenu(screen)
 
             elif event.type == QUIT:
-                running = False
+                pygame.display.quit()
+                pygame.quit()
 
             elif event.type == ADDENEMY:
                 new_enemy = Enemy(SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -81,7 +91,8 @@ def StartScene():
         if pygame.sprite.spritecollide(player, enemies, False):   
             if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask):
                 player.kill()
-                running = False
+                DeathScreen(screen)
+                    
         pygame.display.flip()
         clock.tick(40)
 
