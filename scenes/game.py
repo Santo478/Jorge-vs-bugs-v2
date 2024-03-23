@@ -57,8 +57,10 @@ def StartScene(screen):
     ''' hora de hacer el gameloop '''
     running = True
     music_playing = False
+    
 
     while running:
+        retry = False
         if music_playing:
             pygame.mixer.music.unpause()
         else:
@@ -91,8 +93,12 @@ def StartScene(screen):
         if pygame.sprite.spritecollide(player, enemies, False):   
             if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask):
                 player.kill()
-                DeathScreen(screen)
+                if DeathScreen(screen):
+                    StartScene(screen)
+                else:
+                    return
                     
         pygame.display.flip()
         clock.tick(40)
+
 

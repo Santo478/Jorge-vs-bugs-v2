@@ -28,9 +28,9 @@ def DeathScreen(screen):
         screen.fill((52, 78, 91))
 
         if retry_button.draw(screen):
-            return StartScene(screen)
+            return True
         if main_menu_button.draw(screen):
-            return MainMenu()
+            return False
 
         for event in pygame.event.get():
             if event.type == QUIT:

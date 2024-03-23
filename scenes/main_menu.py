@@ -24,23 +24,24 @@ def MainMenu():
     quit_button = Button(500, 450, QuitImg)
 
     run = True
+    button_pressed = False
+
+    clock = pygame.time.Clock()
 
     while run:
         screen.blit(background_image, [0,0])
         from .game import StartScene
-        if play_button.draw(screen):
+        if play_button.draw(screen) and button_pressed == False:
+            button_pressed = True
             StartScene(screen)
-        if quit_button.draw(screen):
+        if quit_button.draw(screen) and button_pressed == False:
             run = False
         
         for event in pygame.event.get():
             if event.type == QUIT:
                 run = False
-            
         
+        button_pressed = False
         pygame.display.update()
+        clock.tick(40)
     
-    pygame.quit()
-
-if __name__ == "__main__":
-    MainMenu()

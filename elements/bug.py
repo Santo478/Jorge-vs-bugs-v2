@@ -25,7 +25,7 @@ class Enemy(pygame.sprite.Sprite):
                 random.randint(0, SCREEN_HEIGHT),
             )
         )
-        self.speed = random.randint(3,7)
+        self.speed = random.randint(5,7)
 
 
 
