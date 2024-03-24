@@ -57,6 +57,10 @@ def StartScene(screen):
     all_sprites.add(player)
 
     
+    '''texto? tal vez'''
+    puntaje = 0
+    font = pygame.font.Font('freesansbold.ttf', 32)
+
     ''' hora de hacer el gameloop '''
     running = True
     music_playing = False
@@ -109,6 +113,7 @@ def StartScene(screen):
 
         
         screen.blit(background_image, [0,0])
+        screen.blit(font.render(str(puntaje), True, (255,255,255), (0,0,0)), (0,0))
 
         '''Bug animation handler'''
         current_time = pygame.time.get_ticks()
@@ -126,7 +131,9 @@ def StartScene(screen):
             
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
-        enemies.update()
+        for entity in enemies:
+            score = entity.update()
+            puntaje += score
 
         if pygame.sprite.spritecollide(player, enemies, False):   
             if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask):
@@ -136,7 +143,7 @@ def StartScene(screen):
                     StartScene(screen)
                 elif death == False:
                     return
-                    
+            
         pygame.display.flip()
         clock.tick(40)
 

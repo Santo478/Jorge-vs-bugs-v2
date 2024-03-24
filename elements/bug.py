@@ -34,3 +34,5 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.move_ip(-self.speed,0)
         if self.rect.right < 0:
             self.kill()
+            return 100
+        return 0
