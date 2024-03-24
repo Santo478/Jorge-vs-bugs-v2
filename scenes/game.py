@@ -11,6 +11,8 @@ from .pausemenu import PauseMenu
 pygame.mixer.pre_init(44100, -16, 2, 512)
 mixer.init()
 pygame.init()
+
+
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 700
 
@@ -22,8 +24,9 @@ background_image1 = pygame.image.load('assets//Backgrounds/pixelBackground.png')
 background_image = pygame.transform.scale(background_image1, (1000,700))
 
 
-def StartScene(screen):
 
+def StartScene(screen):
+    
     '''play music'''
 
     pygame.mixer.music.load('assets/audio/Music/8bitmusic.mp3')
@@ -58,6 +61,25 @@ def StartScene(screen):
     running = True
     music_playing = False
     
+    '''Animaciones de bugs'''
+    from funciones.animations import SpriteSheet
+
+    bug_sheet_image = pygame.image.load("assets/skins/bugs/BugSheet1.png").convert_alpha()
+    bug_sprite_sheet = SpriteSheet(bug_sheet_image)
+
+    num_frames = 3
+    animation_list = []
+    last_update = pygame.time.get_ticks()
+    animation_cooldown = 100
+    frame = 0
+
+    for i in range(num_frames):
+        aa = bug_sprite_sheet.get_frame(i, 32, 32)
+        aa.set_colorkey((0,0,0))
+        animation_list.append(aa)
+
+
+    '''Loop principal'''
 
     while running:
         retry = False
@@ -70,7 +92,11 @@ def StartScene(screen):
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     menu_sound.play()
-                    PauseMenu(screen)
+                    pause_state = PauseMenu(screen)
+                    if pause_state == True:
+                        return
+                    else:
+                        pass
 
             elif event.type == QUIT:
                 pygame.display.quit()
@@ -83,8 +109,20 @@ def StartScene(screen):
 
         
         screen.blit(background_image, [0,0])
-        for entity in all_sprites:
-            screen.blit(entity.surf, entity.rect)
+
+        '''Bug animation handler'''
+        current_time = pygame.time.get_ticks()
+        if current_time - last_update >= animation_cooldown:
+            frame += 1
+            last_update = current_time
+            if frame >= len(animation_list):
+                frame = 0
+
+        ''''''
+
+        for entity in enemies:
+            screen.blit(pygame.transform.scale(animation_list[frame], (entity.size, entity.size)), entity.rect)
+        screen.blit(player.surf, player.rect)
             
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
@@ -93,9 +131,10 @@ def StartScene(screen):
         if pygame.sprite.spritecollide(player, enemies, False):   
             if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask):
                 player.kill()
-                if DeathScreen(screen):
+                death = DeathScreen(screen)
+                if death == True:
                     StartScene(screen)
-                else:
+                elif death == False:
                     return
                     
         pygame.display.flip()

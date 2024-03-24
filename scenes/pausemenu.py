@@ -34,7 +34,7 @@ def PauseMenu(screen):
             return
 
         if main_menu_button.draw(screen):
-            return
+            return True
         
         for event in pygame.event.get():
             if event.type == KEYDOWN:

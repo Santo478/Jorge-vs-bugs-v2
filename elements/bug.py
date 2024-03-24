@@ -16,6 +16,7 @@ class Enemy(pygame.sprite.Sprite):
         # nos permite invocar métodos o atributos de Sprite
         super(Enemy, self).__init__()
         self.scale_factor = random.uniform(0.5, 1)
+        self.size = 100 * self.scale_factor
         self.surf = pygame.transform.scale(BUGpng_scaled, (100 * self.scale_factor, 100 * self.scale_factor))
         self.mask = pygame.mask.from_surface(self.surf)
         self.surf.set_colorkey((0,0,0), RLEACCEL)

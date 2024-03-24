@@ -31,11 +31,11 @@ def MainMenu():
     while run:
         screen.blit(background_image, [0,0])
         from .game import StartScene
+        if quit_button.draw(screen) and button_pressed == False:
+            run = False
         if play_button.draw(screen) and button_pressed == False:
             button_pressed = True
             StartScene(screen)
-        if quit_button.draw(screen) and button_pressed == False:
-            run = False
         
         for event in pygame.event.get():
             if event.type == QUIT:
