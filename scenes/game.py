@@ -79,7 +79,7 @@ def StartScene(screen):
 
     for i in range(num_frames):
         aa = bug_sprite_sheet.get_frame(i, 32, 32)
-        aa.set_colorkey((0,0,0))
+        
         animation_list.append(aa)
 
 
@@ -143,7 +143,7 @@ def StartScene(screen):
                     StartScene(screen)
                 elif death == False:
                     return
-            
+        
         pygame.display.flip()
         clock.tick(40)
 
