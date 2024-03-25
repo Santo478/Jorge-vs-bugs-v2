@@ -16,36 +16,49 @@ def PauseMenu(screen):
     
     from funciones.button import Button
     ResumeImg = pygame.image.load('assets/Buttons/ResumeButton.png').convert_alpha()
-    resume_button = Button(500, 300, ResumeImg)
-
     MainMenuImg = pygame.image.load('assets/Buttons/MainMenuButton.png').convert_alpha()
-    main_menu_button = Button(500, 450, MainMenuImg)
-
     
+    buttons = [Button(500, 300, ResumeImg, "Resume"),
+               Button(500, 450, MainMenuImg, "Main")]
+    selected_index = 0
+    buttons[selected_index].selected = True
+
 
     run = True
 
     while run:
-        screen.fill((52, 78, 91))
+        screen.fill((61, 105, 132))
 
-        if resume_button.draw(screen):
-            sound.play()
-            pygame.time.delay(150)
-            return
-
-        if main_menu_button.draw(screen):
-            return True
-        
         for event in pygame.event.get():
-            if event.type == KEYDOWN:
+            if event.type == QUIT:
+                pygame.display.quit()
+                return pygame.quit()
+            elif event.type == pygame.KEYDOWN:
                 if event.key == K_ESCAPE:
                     sound.play()
                     pygame.time.delay(150)
                     return
-
-            elif event.type == QUIT:
-                pygame.display.quit()
-                pygame.quit()
+                elif event.key == pygame.K_UP:
+                    buttons[selected_index].play_sound(1)
+                    buttons[selected_index].selected = False
+                    selected_index = (selected_index - 1) % len(buttons)
+                    buttons[selected_index].selected = True
+                elif event.key == pygame.K_DOWN:
+                    buttons[selected_index].play_sound(1)
+                    buttons[selected_index].selected = False
+                    selected_index = (selected_index + 1) % len(buttons)
+                    buttons[selected_index].selected = True
+                elif event.key == pygame.K_RETURN:
+                    if buttons[selected_index].use == "Resume":
+                        buttons[selected_index].play_sound(2)
+                        pygame.time.delay(200)
+                        return
+                    elif buttons[selected_index].use == "Main":
+                        buttons[selected_index].play_sound(2)
+                        pygame.time.delay(200)
+                        return True
+        for button in buttons:
+            button.draw(screen)
         
         pygame.display.update()
     

@@ -17,17 +17,19 @@ background_image = pygame.transform.scale(background_image1, (1000,700))
 
 
 def MainMenu():
-
-    #music handler
-    
-
     pygame.display.set_caption("Main Menu")
+    from .game import StartScene
+
+
+    #button handler
 
     PlayImg = pygame.image.load('assets/Buttons/PlayButton.png').convert_alpha()
-    play_button = Button(500, 300, PlayImg)
-
     QuitImg = pygame.image.load('assets/Buttons/QuitButton.png').convert_alpha()
-    quit_button = Button(500, 450, QuitImg)
+    
+    buttons = [Button(500, 300, PlayImg, "Play"), 
+               Button(500, 450, QuitImg, "Quit")]
+    selected_index = 0
+    buttons[selected_index].selected = True
 
 
     #variables
@@ -48,28 +50,34 @@ def MainMenu():
             pygame.mixer.music.set_volume(0.1)
             pygame.mixer.music.play(-1, 0, 1000)
 
-
-        #Cooldown para clickear
-        if button_pressed:
-            button_timer += 1
-            if button_timer == 25:
-                button_timer = 0
-                button_pressed = False
-
         screen.blit(background_image, [0,0])
-        from .game import StartScene
-        if quit_button.draw(screen) and (button_pressed == False):
-            button_pressed = True
-            run = False
-        if play_button.draw(screen) and (button_pressed == False):
-            button_pressed = True
-            music_played = True
-            StartScene(screen)
         
         for event in pygame.event.get():
-            if event.type == QUIT:
+            if event.type == pygame.QUIT:
                 run = False
-
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    buttons[selected_index].play_sound(1)
+                    buttons[selected_index].selected = False
+                    selected_index = (selected_index - 1) % len(buttons)
+                    buttons[selected_index].selected = True
+                elif event.key == pygame.K_DOWN:
+                    buttons[selected_index].play_sound(1)
+                    buttons[selected_index].selected = False
+                    selected_index = (selected_index + 1) % len(buttons)
+                    buttons[selected_index].selected = True
+                elif event.key == pygame.K_RETURN:
+                    if buttons[selected_index].use == "Play":
+                        music_played = True
+                        buttons[selected_index].play_sound(2)
+                        pygame.time.delay(300)
+                        StartScene(screen)
+                    elif buttons[selected_index].use == "Quit":
+                        buttons[selected_index].play_sound(2)
+                        pygame.time.delay(300)
+                        run = False
+        for button in buttons:
+            button.draw(screen)
         pygame.display.update()
         clock.tick(40)
     
