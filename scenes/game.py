@@ -19,13 +19,15 @@ SCREEN_HEIGHT = 700
 '''cargar musica'''
 
 
-''' 2.- crear el objeto pantalla'''
-background_image1 = pygame.image.load('assets//Backgrounds/pixelBackground.png').convert()
+'''background logic'''
+background_image1 = pygame.image.load('assets//Backgrounds/RepeatBG.png').convert()
 background_image = pygame.transform.scale(background_image1, (1000,700))
 
 
 
+
 def StartScene(screen):
+    background_scrolls = 0
     
     '''play music'''
 
@@ -126,8 +128,15 @@ def StartScene(screen):
                     new_coins = Coins(SCREEN_WIDTH, SCREEN_HEIGHT)
                     coins.add(new_coins)
 
+        #background scroller
+        for i in range(2):
+            screen.blit(background_image, (i * 1000 + background_scrolls, 0))
+        background_scrolls -= 3
+        if abs(background_scrolls) > 1000:
+            background_scrolls = 0
         
-        screen.blit(background_image, [0,0])
+
+
         screen.blit(font.render(str(puntaje), True, (255,255,255), (0,0,0)), (0,0))
 
         '''Bug animation handler'''
