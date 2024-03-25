@@ -107,6 +107,7 @@ def StartScene(screen):
                     menu_sound.play()
                     pause_state = PauseMenu(screen)
                     if pause_state == True:
+                        
                         return
                     else:
                         pass

@@ -19,9 +19,7 @@ background_image = pygame.transform.scale(background_image1, (1000,700))
 def MainMenu():
 
     #music handler
-    pygame.mixer.music.load('assets/audio/Music/MenuMusic.mp3')
-    pygame.mixer.music.set_volume(0.1)
-    pygame.mixer.music.play(-1, 0, 1000)
+    
 
     pygame.display.set_caption("Main Menu")
 
@@ -36,12 +34,22 @@ def MainMenu():
     run = True
     button_pressed = False
     button_timer = 0
-
+    
+    music_played = True
 
     clock = pygame.time.Clock()
 
     while run:
-        pygame.mixer.music.unpause()
+
+        #Maneja que la musica suene de nuevo al volver al menu
+        if music_played:
+            music_played = False
+            pygame.mixer.music.load('assets/audio/Music/MenuMusic.mp3')
+            pygame.mixer.music.set_volume(0.1)
+            pygame.mixer.music.play(-1, 0, 1000)
+
+
+        #Cooldown para clickear
         if button_pressed:
             button_timer += 1
             if button_timer == 25:
@@ -55,7 +63,7 @@ def MainMenu():
             run = False
         if play_button.draw(screen) and (button_pressed == False):
             button_pressed = True
-            pygame.mixer.music.pause()
+            music_played = True
             StartScene(screen)
         
         for event in pygame.event.get():
