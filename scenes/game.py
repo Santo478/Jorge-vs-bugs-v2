@@ -37,8 +37,12 @@ def StartScene(screen):
     menu_sound = pygame.mixer.Sound('assets/audio/Sound/MenuSound.wav')
     menu_sound.set_volume(0.2)
 
+    coin_pickup = pygame.mixer.Sound('assets/audio/Sound/CoinPick.wav')
+    coin_pickup.set_volume(0.1)
+
     from elements.jorge import Player
     from elements.bug import Enemy
+    from elements.intro import Coins
     from .death_screen import DeathScreen
 
     pygame.display.set_caption("Game")
@@ -53,6 +57,7 @@ def StartScene(screen):
 
     ''' 4.- contenedores de enemigos y jugador'''
     enemies = pygame.sprite.Group()
+    coins = pygame.sprite.Group()
     all_sprites = pygame.sprite.Group()
     all_sprites.add(player)
 
@@ -60,6 +65,10 @@ def StartScene(screen):
     '''texto? tal vez'''
     puntaje = 0
     font = pygame.font.Font('freesansbold.ttf', 32)
+
+    '''Zanax: Generador de Coins'''
+    ADDCOIN = pygame.USEREVENT + 2
+    pygame.time.set_timer(ADDCOIN, random.randint(7500,15000))
 
     ''' hora de hacer el gameloop '''
     running = True
@@ -111,6 +120,11 @@ def StartScene(screen):
                 enemies.add(new_enemy)
                 all_sprites.add(new_enemy)
 
+            elif puntaje >= 10:
+                if event.type == ADDCOIN:
+                    new_coins = Coins(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    coins.add(new_coins)
+
         
         screen.blit(background_image, [0,0])
         screen.blit(font.render(str(puntaje), True, (255,255,255), (0,0,0)), (0,0))
@@ -128,6 +142,9 @@ def StartScene(screen):
         for entity in enemies:
             screen.blit(pygame.transform.scale(animation_list[frame], (entity.size, entity.size)), entity.rect)
         screen.blit(player.surf, player.rect)
+
+        for X in coins:
+            screen.blit(X.surf,X.rect)
             
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
@@ -135,6 +152,7 @@ def StartScene(screen):
             score = entity.update()
             puntaje += score
 
+        #COLLIDE DE ENEMIGOS
         if pygame.sprite.spritecollide(player, enemies, False):   
             if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask):
                 player.kill()
@@ -143,6 +161,11 @@ def StartScene(screen):
                     StartScene(screen)
                 elif death == False:
                     return
+        #COLLIDE DE MONEDAS 
+        if pygame.sprite.spritecollide(player, coins, False):   
+            if pygame.sprite.spritecollide(player, coins, True, pygame.sprite.collide_mask):
+                coin_pickup.play()
+                puntaje += 500
         
         pygame.display.flip()
         clock.tick(40)
