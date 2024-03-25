@@ -23,4 +23,6 @@ class Button:
 
         surface.blit(self.image, (self.rect.x, self.rect.y))
 
-        return action
+        if self.clicked:
+            self.clicked = False
+            return True
