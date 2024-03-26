@@ -5,7 +5,7 @@ pygame.mixer.init()
 sound1 = pygame.mixer.Sound("assets/audio/Sound/ButtonChange.mp3")
 sound1.set_volume(0.2)
 sound2 = pygame.mixer.Sound("assets/audio/Sound/ButtonPressed.mp3")
-sound2.set_volume(0.2)
+sound2.set_volume(0.1)
         
 class Button:
     def __init__(self, x, y, image, use):

@@ -80,18 +80,10 @@ def StartScene(screen):
     from funciones.animations import SpriteSheet
 
     bug_sheet_image = pygame.image.load("assets/skins/bugs/BugSheet1.png").convert_alpha()
-    bug_sprite_sheet = SpriteSheet(bug_sheet_image)
+    bug_sprite_sheet = SpriteSheet(bug_sheet_image, 3, 100)
+    bug_sprite_sheet.get_frames(32, 32)
 
-    num_frames = 3
-    animation_list = []
     last_update = pygame.time.get_ticks()
-    animation_cooldown = 100
-    frame = 0
-
-    for i in range(num_frames):
-        aa = bug_sprite_sheet.get_frame(i, 32, 32)
-        
-        animation_list.append(aa)
 
 
     '''Loop principal'''
@@ -131,7 +123,7 @@ def StartScene(screen):
         #background scroller
         for i in range(2):
             screen.blit(background_image, (i * 1000 + background_scrolls, 0))
-        background_scrolls -= 3
+        background_scrolls -= 2
         if abs(background_scrolls) > 1000:
             background_scrolls = 0
         
@@ -141,16 +133,16 @@ def StartScene(screen):
 
         '''Bug animation handler'''
         current_time = pygame.time.get_ticks()
-        if current_time - last_update >= animation_cooldown:
-            frame += 1
+        if current_time - last_update >= bug_sprite_sheet.cooldown:
+            bug_sprite_sheet.frame += 1
             last_update = current_time
-            if frame >= len(animation_list):
-                frame = 0
+            if bug_sprite_sheet.frame >= len(bug_sprite_sheet.animation_list):
+                bug_sprite_sheet.frame = 0
 
         ''''''
 
         for entity in enemies:
-            screen.blit(pygame.transform.scale(animation_list[frame], (entity.size, entity.size)), entity.rect)
+            screen.blit(pygame.transform.scale(bug_sprite_sheet.animation_list[bug_sprite_sheet.frame], (entity.size, entity.size)), entity.rect)
         screen.blit(player.surf, player.rect)
 
         for X in coins:
@@ -168,8 +160,10 @@ def StartScene(screen):
                 player.kill()
                 death = DeathScreen(screen)
                 if death == True:
+                    del death
                     StartScene(screen)
                 elif death == False:
+                    del death
                     return
         #COLLIDE DE MONEDAS 
         if pygame.sprite.spritecollide(player, coins, False):   

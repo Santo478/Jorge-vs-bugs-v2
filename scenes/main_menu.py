@@ -74,7 +74,7 @@ def MainMenu():
                         StartScene(screen)
                     elif buttons[selected_index].use == "Quit":
                         buttons[selected_index].play_sound(2)
-                        pygame.time.delay(300)
+                        pygame.time.delay(700)
                         run = False
         for button in buttons:
             button.draw(screen)
