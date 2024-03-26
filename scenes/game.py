@@ -80,18 +80,14 @@ def StartScene(screen):
     from funciones.animations import SpriteSheet
 
     bug_sheet_image = pygame.image.load("assets/skins/bugs/BugSheet1.png").convert_alpha()
-    bug_sprite_sheet = SpriteSheet(bug_sheet_image)
+    bug_sprite_sheet = SpriteSheet(bug_sheet_image, 3, 100)
+    bug_sprite_sheet.get_frames(32, 32)
 
-    num_frames = 3
-    animation_list = []
+    jorge_sheet_image = pygame.image.load("assets/skins/Jorge/JorgeVJSheet.png").convert_alpha()
+    jorge_sprite_sheet = SpriteSheet(jorge_sheet_image, 2, 100)
+    jorge_sprite_sheet.get_frames(50, 50)
+
     last_update = pygame.time.get_ticks()
-    animation_cooldown = 100
-    frame = 0
-
-    for i in range(num_frames):
-        aa = bug_sprite_sheet.get_frame(i, 32, 32)
-        
-        animation_list.append(aa)
 
 
     '''Loop principal'''
@@ -131,7 +127,7 @@ def StartScene(screen):
         #background scroller
         for i in range(2):
             screen.blit(background_image, (i * 1000 + background_scrolls, 0))
-        background_scrolls -= 3
+        background_scrolls -= 2
         if abs(background_scrolls) > 1000:
             background_scrolls = 0
         
@@ -139,19 +135,25 @@ def StartScene(screen):
 
         screen.blit(font.render(str(puntaje), True, (255,255,255), (0,0,0)), (0,0))
 
-        '''Bug animation handler'''
+        '''animation cooldown handler'''
         current_time = pygame.time.get_ticks()
-        if current_time - last_update >= animation_cooldown:
-            frame += 1
+        if current_time - last_update >= bug_sprite_sheet.cooldown:
+            bug_sprite_sheet.frame += 1
+            jorge_sprite_sheet.frame += 1
             last_update = current_time
-            if frame >= len(animation_list):
-                frame = 0
+            if bug_sprite_sheet.frame >= len(bug_sprite_sheet.animation_list):
+                bug_sprite_sheet.frame = 0
+            if jorge_sprite_sheet.frame >= len(jorge_sprite_sheet.animation_list):
+                jorge_sprite_sheet.frame = 0
+
+    
+            
 
         ''''''
 
         for entity in enemies:
-            screen.blit(pygame.transform.scale(animation_list[frame], (entity.size, entity.size)), entity.rect)
-        screen.blit(player.surf, player.rect)
+            screen.blit(pygame.transform.scale(bug_sprite_sheet.animation_list[bug_sprite_sheet.frame], (entity.size, entity.size)), entity.rect)
+        screen.blit(pygame.transform.scale(jorge_sprite_sheet.animation_list[jorge_sprite_sheet.frame], (64, 64)), player.rect)
 
         for X in coins:
             screen.blit(X.surf,X.rect)
@@ -165,16 +167,14 @@ def StartScene(screen):
         #COLLIDE DE ENEMIGOS
         if pygame.sprite.spritecollide(player, enemies, False):   
             if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask):
-                player.hide()
-                player.lives -= 1
-            
-        if player.lives == 0:
-            player.kill()
-            death = DeathScreen(screen)
-            if death == True:
-                StartScene(screen)
-            elif death == False:
-                return
+                player.kill()
+                death = DeathScreen(screen)
+                if death == True:
+                    del death
+                    StartScene(screen)
+                elif death == False:
+                    del death
+                    return
         #COLLIDE DE MONEDAS 
         if pygame.sprite.spritecollide(player, coins, False):   
             if pygame.sprite.spritecollide(player, coins, True, pygame.sprite.collide_mask):

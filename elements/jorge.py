@@ -8,7 +8,7 @@ from pygame.locals import (
 
 
 JorgePNG = pygame.image.load('assets/skins/jorge/JorgeVJ.png').convert_alpha()
-JorgePNG_scaled = pygame.transform.scale(JorgePNG, (80,90))
+JorgePNG_scaled = pygame.transform.scale(JorgePNG, (64,64))
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT):
@@ -36,9 +36,12 @@ class Player(pygame.sprite.Sprite):
         if pressed_keys[K_DOWN]:
             self.rect.move_ip(0,4)
         if pressed_keys[K_LEFT] and self.rect.left >= 0:
-            self.rect.move_ip(-4,0)
+            self.rect.move_ip(-6,0)
         if pressed_keys[K_RIGHT]:
             self.rect.move_ip(4,0)
+        if not pressed_keys[K_UP] and not pressed_keys[K_DOWN] and not pressed_keys[K_LEFT] and not pressed_keys[K_RIGHT]:
+            self.rect.move_ip(-2,0)
+
 
 
         if self.rect.right > self.screen_width:
