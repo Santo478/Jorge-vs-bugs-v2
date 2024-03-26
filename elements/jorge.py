@@ -28,14 +28,14 @@ class Player(pygame.sprite.Sprite):
         
 
     def update(self, pressed_keys):
-        if self.hidden and pygame.time.get_ticks() - self.hide_timer > 10000:
+        if self.hidden and pygame.time.get_ticks() - self.hide_timer > 1000:
             self.hidden = False
             self.rect.center = (30, 350)
         if pressed_keys[K_UP]:
             self.rect.move_ip(0,-4)
         if pressed_keys[K_DOWN]:
             self.rect.move_ip(0,4)
-        if pressed_keys[K_LEFT] and self.rect.left >= 0:
+        if pressed_keys[K_LEFT]:
             self.rect.move_ip(-6,0)
         if pressed_keys[K_RIGHT]:
             self.rect.move_ip(4,0)
@@ -43,7 +43,8 @@ class Player(pygame.sprite.Sprite):
             self.rect.move_ip(-2,0)
 
 
-
+        if self.hidden == False and self.rect.left <= 0:
+            self.rect.left = 0
         if self.rect.right > self.screen_width:
             self.rect.right = self.screen_width
         if self.rect.top < 0:
@@ -51,8 +52,10 @@ class Player(pygame.sprite.Sprite):
         if self.rect.bottom > self.screen_height:
             self.rect.bottom = self.screen_height
 
-    def hide(self):
+    def hide(self,pressed_keys):
         self.hidden = True
         self.hide_timer = pygame.time.get_ticks()
         self.rect.center = (-80, 350)
+        self.rect.move_ip(0,0)
+
     
