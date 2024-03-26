@@ -179,7 +179,7 @@ def StartScene(screen):
                 player.lives -= 1
                 hurt_sound.play()
             
-        if player.lives == 0:
+        if player.lives <= 0:
             player.kill()
             death = DeathScreen(screen)
             if death == True:
