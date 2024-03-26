@@ -23,7 +23,10 @@ SCREEN_HEIGHT = 700
 background_image1 = pygame.image.load('assets//Backgrounds/RepeatBG.png').convert()
 background_image = pygame.transform.scale(background_image1, (1000,700))
 
+'''vidas'''
 
+VidasPNG = pygame.image.load('assets/Extras/Heart.png').convert_alpha()
+VidasPNG_scaled = pygame.transform.scale(VidasPNG, (40,40))
 
 
 def StartScene(screen):
@@ -180,6 +183,10 @@ def StartScene(screen):
             if pygame.sprite.spritecollide(player, coins, True, pygame.sprite.collide_mask):
                 coin_pickup.play()
                 puntaje += 500
+        
+        #DISPLAY VIDAS
+        for i in range(player.lives):
+            screen.blit(VidasPNG_scaled,(820 + 40*i, 40))
         
         pygame.display.flip()
         clock.tick(40)
