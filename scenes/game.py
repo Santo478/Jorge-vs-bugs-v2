@@ -83,6 +83,10 @@ def StartScene(screen):
     bug_sprite_sheet = SpriteSheet(bug_sheet_image, 3, 100)
     bug_sprite_sheet.get_frames(32, 32)
 
+    jorge_sheet_image = pygame.image.load("assets/skins/Jorge/JorgeVJSheet.png").convert_alpha()
+    jorge_sprite_sheet = SpriteSheet(jorge_sheet_image, 2, 100)
+    jorge_sprite_sheet.get_frames(50, 50)
+
     last_update = pygame.time.get_ticks()
 
 
@@ -131,19 +135,25 @@ def StartScene(screen):
 
         screen.blit(font.render(str(puntaje), True, (255,255,255), (0,0,0)), (0,0))
 
-        '''Bug animation handler'''
+        '''animation cooldown handler'''
         current_time = pygame.time.get_ticks()
         if current_time - last_update >= bug_sprite_sheet.cooldown:
             bug_sprite_sheet.frame += 1
+            jorge_sprite_sheet.frame += 1
             last_update = current_time
             if bug_sprite_sheet.frame >= len(bug_sprite_sheet.animation_list):
                 bug_sprite_sheet.frame = 0
+            if jorge_sprite_sheet.frame >= len(jorge_sprite_sheet.animation_list):
+                jorge_sprite_sheet.frame = 0
+
+    
+            
 
         ''''''
 
         for entity in enemies:
             screen.blit(pygame.transform.scale(bug_sprite_sheet.animation_list[bug_sprite_sheet.frame], (entity.size, entity.size)), entity.rect)
-        screen.blit(player.surf, player.rect)
+        screen.blit(pygame.transform.scale(jorge_sprite_sheet.animation_list[jorge_sprite_sheet.frame], (64, 64)), player.rect)
 
         for X in coins:
             screen.blit(X.surf,X.rect)
