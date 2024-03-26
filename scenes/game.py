@@ -170,7 +170,7 @@ def StartScene(screen):
         #COLLIDE DE ENEMIGOS
         if pygame.sprite.spritecollide(player, enemies, False):   
             if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask):
-                player.hide()
+                player.hide(pressed_keys)
                 player.lives -= 1
             
         if player.lives == 0:
