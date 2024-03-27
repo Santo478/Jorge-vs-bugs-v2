@@ -95,6 +95,10 @@ def StartScene(screen):
     jorge_sprite_sheet = SpriteSheet(jorge_sheet_image, 2, 100)
     jorge_sprite_sheet.get_frames(50, 50)
 
+    coins_sprite_image = pygame.image.load("assets/Extras/IntroCoinsSheet.png").convert_alpha()
+    coins_sprite_sheet = SpriteSheet(coins_sprite_image, 8, 100)
+    coins_sprite_sheet.get_frames(30, 30)
+
     last_update = pygame.time.get_ticks()
 
 
@@ -148,12 +152,14 @@ def StartScene(screen):
         if current_time - last_update >= bug_sprite_sheet.cooldown:
             bug_sprite_sheet.frame += 1
             jorge_sprite_sheet.frame += 1
+            coins_sprite_sheet.frame += 1
             last_update = current_time
             if bug_sprite_sheet.frame >= len(bug_sprite_sheet.animation_list):
                 bug_sprite_sheet.frame = 0
             if jorge_sprite_sheet.frame >= len(jorge_sprite_sheet.animation_list):
                 jorge_sprite_sheet.frame = 0
-
+            if coins_sprite_sheet.frame >= len(coins_sprite_sheet.animation_list):
+                coins_sprite_sheet.frame = 0
     
             
 
@@ -162,9 +168,9 @@ def StartScene(screen):
         for entity in enemies:
             screen.blit(pygame.transform.scale(bug_sprite_sheet.animation_list[bug_sprite_sheet.frame], (entity.size, entity.size)), entity.rect)
         screen.blit(pygame.transform.scale(jorge_sprite_sheet.animation_list[jorge_sprite_sheet.frame], (64, 64)), player.rect)
+        for entity in coins:
+            screen.blit(coins_sprite_sheet.animation_list[coins_sprite_sheet.frame],entity.rect)
 
-        for X in coins:
-            screen.blit(X.surf,X.rect)
             
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
