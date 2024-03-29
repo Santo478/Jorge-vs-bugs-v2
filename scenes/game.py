@@ -147,7 +147,7 @@ def StartScene(screen):
         for entity in enemies:
             sprite_sheets[0].screen_blit(screen, entity, entity.size)
         sprite_sheets[1].screen_blit(screen, player, 64)
-        
+
         ###
         for X in coins:
             screen.blit(X.surf,X.rect)
@@ -171,7 +171,8 @@ def StartScene(screen):
             if death == True:
                 StartScene(screen)
             elif death == False:
-                return
+                from .main_menu import MainMenu
+                MainMenu()
         #COLLIDE DE MONEDAS 
         if pygame.sprite.spritecollide(player, coins, False):   
             if pygame.sprite.spritecollide(player, coins, True, pygame.sprite.collide_mask):
