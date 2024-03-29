@@ -88,15 +88,14 @@ def StartScene(screen):
     from funciones.animations import SpriteSheet
 
     bug_sheet_image = pygame.image.load("assets/skins/bugs/BugSheet1.png").convert_alpha()
-    bug_sprite_sheet = SpriteSheet(bug_sheet_image, 3, 100)
-    bug_sprite_sheet.get_frames(32, 32)
-
     jorge_sheet_image = pygame.image.load("assets/skins/Jorge/JorgeVJSheet.png").convert_alpha()
-    jorge_sprite_sheet = SpriteSheet(jorge_sheet_image, 2, 100)
-    jorge_sprite_sheet.get_frames(50, 50)
 
-    last_update = pygame.time.get_ticks()
+    sprite_sheets = [SpriteSheet(bug_sheet_image, 3, 100, 32, 32),
+                    SpriteSheet(jorge_sheet_image, 2, 75, 50, 50)]
 
+    for i in sprite_sheets:
+        i.get_frames()
+        i.last_update = pygame.time.get_ticks()
 
     '''Loop principal'''
 
@@ -138,31 +137,18 @@ def StartScene(screen):
         background_scrolls -= 2
         if abs(background_scrolls) > 1000:
             background_scrolls = 0
-        
-
 
         screen.blit(font.render(str(puntaje), True, (255,255,255), (0,0,0)), (0,0))
 
-        '''animation cooldown handler'''
-        current_time = pygame.time.get_ticks()
-        if current_time - last_update >= bug_sprite_sheet.cooldown:
-            bug_sprite_sheet.frame += 1
-            jorge_sprite_sheet.frame += 1
-            last_update = current_time
-            if bug_sprite_sheet.frame >= len(bug_sprite_sheet.animation_list):
-                bug_sprite_sheet.frame = 0
-            if jorge_sprite_sheet.frame >= len(jorge_sprite_sheet.animation_list):
-                jorge_sprite_sheet.frame = 0
-
-    
-            
-
-        ''''''
+        #animacion sprite sheets
+        for i in sprite_sheets:
+            i.animate()
 
         for entity in enemies:
-            screen.blit(pygame.transform.scale(bug_sprite_sheet.animation_list[bug_sprite_sheet.frame], (entity.size, entity.size)), entity.rect)
-        screen.blit(pygame.transform.scale(jorge_sprite_sheet.animation_list[jorge_sprite_sheet.frame], (64, 64)), player.rect)
-
+            sprite_sheets[0].screen_blit(screen, entity, entity.size)
+        sprite_sheets[1].screen_blit(screen, player, 64)
+        
+        ###
         for X in coins:
             screen.blit(X.surf,X.rect)
             
