@@ -84,14 +84,15 @@ def StartScene(screen):
     running = True
     music_playing = False
     
-    '''Animaciones de bugs'''
+    '''Animaciones'''
     from funciones.animations import SpriteSheet
 
     bug_sheet_image = pygame.image.load("assets/skins/bugs/BugSheet1.png").convert_alpha()
     jorge_sheet_image = pygame.image.load("assets/skins/Jorge/JorgeVJSheet.png").convert_alpha()
-
+    coin_sheet_image = pygame.image.load('assets/Extras/IntroCoinsSheet.png').convert_alpha()
     sprite_sheets = [SpriteSheet(bug_sheet_image, 3, 100, 32, 32),
-                    SpriteSheet(jorge_sheet_image, 2, 75, 50, 50)]
+                    SpriteSheet(jorge_sheet_image, 2, 75, 50, 50),
+                    SpriteSheet(coin_sheet_image, 8, 85, 30, 30)]
 
     for i in sprite_sheets:
         i.get_frames()
@@ -147,10 +148,8 @@ def StartScene(screen):
         for entity in enemies:
             sprite_sheets[0].screen_blit(screen, entity, entity.size)
         sprite_sheets[1].screen_blit(screen, player, 64)
-
-        ###
-        for X in coins:
-            screen.blit(X.surf,X.rect)
+        for coin in coins:
+            sprite_sheets[2].screen_blit(screen, coin, 30)
             
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
