@@ -45,6 +45,11 @@ def StartScene(screen):
     coin_pickup = pygame.mixer.Sound('assets/audio/Sound/CoinPick.wav')
     coin_pickup.set_volume(0.1)
 
+    hurt_sound = pygame.mixer.Sound("assets/audio/Sound/Hurt.mp3")
+    hurt_sound.set_volume(0.3)
+
+
+
     from elements.jorge import Player
     from elements.bug import Enemy
     from elements.intro import Coins
@@ -170,14 +175,17 @@ def StartScene(screen):
         #COLLIDE DE ENEMIGOS
         if pygame.sprite.spritecollide(player, enemies, False):   
             if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask):
-                player.kill()
-                death = DeathScreen(screen)
-                if death == True:
-                    del death
-                    StartScene(screen)
-                elif death == False:
-                    del death
-                    return
+                player.hide(pressed_keys)
+                player.lives -= 1
+                hurt_sound.play()
+            
+        if player.lives <= 0:
+            player.kill()
+            death = DeathScreen(screen)
+            if death == True:
+                StartScene(screen)
+            elif death == False:
+                return
         #COLLIDE DE MONEDAS 
         if pygame.sprite.spritecollide(player, coins, False):   
             if pygame.sprite.spritecollide(player, coins, True, pygame.sprite.collide_mask):

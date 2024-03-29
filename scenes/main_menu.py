@@ -14,6 +14,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 background_image1 = pygame.image.load('assets//Backgrounds/portada.png').convert()
 background_image = pygame.transform.scale(background_image1, (1000,700))
 
+pygame.mouse.set_visible(False)
 
 
 def MainMenu():
@@ -39,6 +40,11 @@ def MainMenu():
     
     music_played = True
 
+    '''
+    range = 0
+    range_bool = True
+    '''
+
     clock = pygame.time.Clock()
 
     while run:
@@ -51,6 +57,16 @@ def MainMenu():
             pygame.mixer.music.play(-1, 0, 1000)
 
         screen.blit(background_image, [0,0])
+
+        '''if range_bool:
+            range += 1
+        elif range_bool == False:
+            range -= 1
+        if range == 20:
+            range_bool = False
+        if range == -20:
+            range_bool = True
+        '''
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
