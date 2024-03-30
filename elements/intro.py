@@ -20,7 +20,13 @@ class Coins(pygame.sprite.Sprite):
         self.screen_height = SCREEN_HEIGHT
         self.rect = self.surf.get_rect(
             center = (
-                random.randint(50,800),
+                random.randint(150,800),
                 random.randint(50, 650),
             )
         )
+    def update(self):
+        self.rect.move_ip(-2,0)
+        if self.rect.right < 0:
+            self.kill()
+            return 100
+        return 0

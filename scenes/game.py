@@ -153,6 +153,8 @@ def StartScene(screen):
             
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
+        for entity in coins:
+            Vel = entity.update()
         for entity in enemies:
             score = entity.update()
             puntaje += score
