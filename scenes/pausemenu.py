@@ -56,7 +56,8 @@ def PauseMenu(screen):
                     elif buttons[selected_index].use == "Main":
                         buttons[selected_index].play_sound(2)
                         pygame.time.delay(200)
-                        return True
+                        from .main_menu import MainMenu
+                        MainMenu()
         for button in buttons:
             button.draw(screen)
         
