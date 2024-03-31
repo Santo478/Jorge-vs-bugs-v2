@@ -30,5 +30,3 @@ class Coins(pygame.sprite.Sprite):
             self.kill()
         if self.rect.height > 700:
             self.kill()
-            return 100
-        return 0

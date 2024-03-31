@@ -98,9 +98,12 @@ def StartScene(screen):
         i.get_frames()
         i.last_update = pygame.time.get_ticks()
 
+    frame_num = 0
+
     '''Loop principal'''
 
     while running:
+        frame_num += 1
         retry = False
         if music_playing:
             pygame.mixer.music.unpause()
@@ -145,26 +148,34 @@ def StartScene(screen):
         for i in sprite_sheets:
             i.animate()
 
+
+        if player.is_dead:
+            if frame_num % 3 == 0:
+                sprite_sheets[1].screen_blit(screen, player, 64)
+        elif player.is_dead == False:
+            sprite_sheets[1].screen_blit(screen, player, 64)
         for entity in enemies:
             sprite_sheets[0].screen_blit(screen, entity, entity.size)
-        sprite_sheets[1].screen_blit(screen, player, 64)
         for coin in coins:
             sprite_sheets[2].screen_blit(screen, coin, 30)
             
+        #actualizar objetos
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
+
         for entity in coins:
-            Vel = entity.update()
+            entity.update()
         for entity in enemies:
             score = entity.update()
             puntaje += score
 
         #COLLIDE DE ENEMIGOS
-        if pygame.sprite.spritecollide(player, enemies, False):   
-            if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask):
-                player.hide(pressed_keys)
-                player.lives -= 1
-                hurt_sound.play()
+        if player.is_dead == False:
+            if pygame.sprite.spritecollide(player, enemies, False):   
+                if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask):
+                    player.is_dead = True
+                    player.lives -= 1
+                    hurt_sound.play()
             
         if player.lives <= 0:
             player.kill()
