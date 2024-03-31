@@ -32,25 +32,3 @@ class SpriteSheet():
     def screen_blit(self, screen, entity, size):
         resized = pygame.transform.scale(self.animation_list[self.frame], (size, size))
         screen.blit(resized, entity.rect)
-
-
-'''
-current_time = pygame.time.get_ticks()
-if current_time - last_update >= animation_cooldown:
-    frame += 1
-    last_update = current_time
-    if frame >= len(animation_list):
-        frame = 0
-'''
-'''
-num_frames = 3
-animation_list = []
-last_update = pygame.time.get_ticks()
-animation_cooldown = 100
-frame = 0
-
-for i in range(num_frames):
-    aa = bug_sprite_sheet.get_frame(i, 32, 32)
-    
-    animation_list.append(aa)
-''' 

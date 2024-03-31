@@ -3,7 +3,7 @@ import random
 from pygame.locals import (RLEACCEL)
 
 Intropng = pygame.image.load('assets/Extras/IntroCoins.png').convert_alpha()
-Intropng_scaled = pygame.transform.scale(Intropng, (50,50))
+Intropng_scaled = pygame.transform.scale(Intropng, (30,30))
 
 
 class Coins(pygame.sprite.Sprite):
