@@ -2,16 +2,16 @@ import pygame
 import random
 from pygame.locals import (RLEACCEL)
 
-Intropng = pygame.image.load('assets/Extras/IntroCoins.png').convert_alpha()
-Intropng_scaled = pygame.transform.scale(Intropng, (30,30))
+BUGpng = pygame.image.load('assets/skins/bugs/bug.png').convert_alpha()
+BUGpng_scaled = pygame.transform.scale(BUGpng, (64,64))
 
 
-class Coins(pygame.sprite.Sprite):
+class Bullet(pygame.sprite.Sprite):
 
     def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT):
         # nos permite invocar métodos o atributos de Sprite
-        super(Coins, self).__init__()
-        self.surf = Intropng_scaled
+        super(Bullet, self).__init__()
+        self.surf = BUGpng_scaled
 
         self.mask = pygame.mask.from_surface(self.surf)
 
@@ -21,14 +21,12 @@ class Coins(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(
             center = (
                 random.randint(150,800),
-                0,
+                random.randint(50, 650),
             )
         )
     def update(self):
-        self.rect.move_ip(-2,4)
-        if self.rect.right < 0:
-            self.kill()
-        if self.rect.height > 700:
+        self.rect.move_ip(10,0)
+        if self.rect.right > 1000:
             self.kill()
             return 100
         return 0
