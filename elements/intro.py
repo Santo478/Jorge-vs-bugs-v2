@@ -21,12 +21,14 @@ class Coins(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(
             center = (
                 random.randint(150,800),
-                random.randint(50, 650),
+                0,
             )
         )
     def update(self):
-        self.rect.move_ip(-2,0)
+        self.rect.move_ip(-2,4)
         if self.rect.right < 0:
+            self.kill()
+        if self.rect.height > 700:
             self.kill()
             return 100
         return 0
