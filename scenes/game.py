@@ -53,6 +53,7 @@ def StartScene(screen):
     from elements.jorge import Player
     from elements.bug import Enemy
     from elements.intro import Coins
+    from elements.Bullet import Bullet
     from .death_screen import DeathScreen
 
     pygame.display.set_caption("Game")
@@ -69,6 +70,7 @@ def StartScene(screen):
     enemies = pygame.sprite.Group()
     coins = pygame.sprite.Group()
     all_sprites = pygame.sprite.Group()
+    bullets = pygame.sprite.Group()
     all_sprites.add(player)
 
     
@@ -120,6 +122,10 @@ def StartScene(screen):
                         return
                     else:
                         pass
+                if event.key == pygame.K_SPACE:
+                        # Cuando se presiona la tecla espacio, se dispara una bala desde la posición del jugador
+                        bullet = Bullet(player.rect.centerx, player.rect.centery)
+                        bullets.add(bullet)
 
             elif event.type == QUIT:
                 pygame.display.quit()
@@ -168,6 +174,9 @@ def StartScene(screen):
         for entity in enemies:
             score = entity.update()
             puntaje += score
+        for entity in bullets:
+            entity.update()
+            screen.blit(entity.image, entity.rect)
 
         #COLLIDE DE ENEMIGOS
         if player.is_dead == False:
@@ -194,6 +203,7 @@ def StartScene(screen):
         #DISPLAY VIDAS
         for i in range(player.lives):
             screen.blit(VidasPNG_scaled,(820 + 40*i, 40))
+
         
         pygame.display.flip()
         clock.tick(40)
