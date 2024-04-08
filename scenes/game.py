@@ -101,6 +101,8 @@ def StartScene(screen):
         i.last_update = pygame.time.get_ticks()
 
     frame_num = 0
+    '''Control de Balas'''
+    shoot_state = False
 
     '''Loop principal'''
 
@@ -123,9 +125,11 @@ def StartScene(screen):
                     else:
                         pass
                 if event.key == pygame.K_SPACE:
-                        # Cuando se presiona la tecla espacio, se dispara una bala desde la posición del jugador
-                        bullet = Bullet(player.rect.centerx, player.rect.centery)
-                        bullets.add(bullet)
+                    if shoot_state == False:
+                            # Cuando se presiona la tecla espacio, se dispara una bala desde la posición del jugador
+                            bullet = Bullet(player.rect.centerx + 20, player.rect.centery + 2)
+                            bullets.add(bullet)
+                            shoot_state = True
 
             elif event.type == QUIT:
                 pygame.display.quit()
@@ -176,7 +180,8 @@ def StartScene(screen):
             puntaje += score
         for entity in bullets:
             entity.update()
-            screen.blit(entity.image, entity.rect)
+            screen.blit(entity.surf, entity.rect)
+            shoot_state = entity.update()
 
         #COLLIDE DE ENEMIGOS
         if player.is_dead == False:
@@ -200,6 +205,13 @@ def StartScene(screen):
                 coin_pickup.play()
                 puntaje += 500
         
+        #COLLIDE DE BALAS
+        if pygame.sprite.groupcollide(bullets, enemies, False, False):   
+            if pygame.sprite.groupcollide(bullets, enemies, True, True, pygame.sprite.collide_mask):
+                puntaje += 150
+                hurt_sound.play()
+                shoot_state = False
+
         #DISPLAY VIDAS
         for i in range(player.lives):
             screen.blit(VidasPNG_scaled,(820 + 40*i, 40))
