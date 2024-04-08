@@ -97,4 +97,3 @@ def MainMenu():
             button.draw(screen)
         pygame.display.update()
         clock.tick(40)
-    

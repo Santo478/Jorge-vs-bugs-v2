@@ -22,6 +22,13 @@ SCREEN_HEIGHT = 700
 '''background logic'''
 background_image1 = pygame.image.load('assets//Backgrounds/RepeatBG.png').convert()
 background_image = pygame.transform.scale(background_image1, (1000,700))
+background_image2 = pygame.image.load('assets//Backgrounds/RepeatBGBlue.png').convert()
+background_imageBlue = pygame.transform.scale(background_image2, (1000,700))
+background_image3 = pygame.image.load('assets//Backgrounds/RepeatBGYellow.png').convert()
+background_imageYellow = pygame.transform.scale(background_image3, (1000,700))
+background_image4 = pygame.image.load('assets//Backgrounds/RepeatBGRed.png').convert()
+background_imageRed = pygame.transform.scale(background_image4, (1000,700))
+
 
 '''vidas'''
 
@@ -130,7 +137,6 @@ def StartScene(screen):
                             bullet = Bullet(player.rect.centerx + 20, player.rect.centery + 2)
                             bullets.add(bullet)
                             shoot_state = True
-
             elif event.type == QUIT:
                 pygame.display.quit()
                 pygame.quit()
@@ -146,11 +152,14 @@ def StartScene(screen):
                     coins.add(new_coins)
 
         #background scroller
+
         for i in range(2):
             screen.blit(background_image, (i * 1000 + background_scrolls, 0))
+
         background_scrolls -= 2
         if abs(background_scrolls) > 1000:
             background_scrolls = 0
+        
 
         screen.blit(font.render(str(puntaje), True, (255,255,255), (0,0,0)), (0,0))
 
@@ -219,5 +228,3 @@ def StartScene(screen):
         
         pygame.display.flip()
         clock.tick(40)
-
-
