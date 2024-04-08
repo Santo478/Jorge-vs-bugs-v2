@@ -4,6 +4,7 @@ este modulo manejara la creacion y acciones de los Bugs
 """
 import pygame
 import random
+import math
 from pygame.locals import (RLEACCEL)
 
 BUGpng = pygame.image.load('assets/skins/bugs/bug.png').convert_alpha()
@@ -12,7 +13,7 @@ BUGpng_scaled = pygame.transform.scale(BUGpng, (64,64))
 
 class Enemy(pygame.sprite.Sprite):
 
-    def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT):
+    def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, speed_level):
         # nos permite invocar métodos o atributos de Sprite
         super(Enemy, self).__init__()
         self.scale_factor = random.uniform(0.5, 1)
@@ -26,7 +27,8 @@ class Enemy(pygame.sprite.Sprite):
                 random.randint(0, SCREEN_HEIGHT),
             )
         )
-        self.speed = random.randint(5,7)
+
+        self.speed = random.randint(math.floor(5 * speed_level**0.5),math.floor(7 ** speed_level**0.5))
 
 
 

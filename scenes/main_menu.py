@@ -16,13 +16,21 @@ background_image = pygame.transform.scale(background_image1, (1000,700))
 
 pygame.mouse.set_visible(False)
 
+opacity_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+def opacity_to_screen():
+    pygame.draw.rect(opacity_surface, (0, 0, 0, 55), (0,0,1000,700))
+
 
 def MainMenu():
     pygame.display.set_caption("Main Menu")
     from .game import StartScene
+    from .stage2 import StartScene2
+    from .stage3 import StartScene3
 
 
     #button handler
+
+    SideButton = pygame.transform.scale(pygame.image.load("assets/Buttons/SideButton.png"), (70,70))
 
     PlayImg = pygame.image.load('assets/Buttons/PlayButton.png').convert_alpha()
     QuitImg = pygame.image.load('assets/Buttons/QuitButton.png').convert_alpha()
@@ -48,7 +56,7 @@ def MainMenu():
     clock = pygame.time.Clock()
 
     while run:
-
+        
         #Maneja que la musica suene de nuevo al volver al menu
         if music_played:
             music_played = False
@@ -57,6 +65,8 @@ def MainMenu():
             pygame.mixer.music.play(-1, 0, 1000)
 
         screen.blit(background_image, [0,0])
+        screen.blit(opacity_surface, (0,0))
+        opacity_to_screen()
 
         '''if range_bool:
             range += 1
@@ -93,7 +103,11 @@ def MainMenu():
                         pygame.time.delay(700)
                         pygame.quit()
                         run = False
+                elif event.key == pygame.K_SPACE:
+                    StartScene3(screen)
         for button in buttons:
             button.draw(screen)
+
+        screen.blit(SideButton, (270 ,buttons[selected_index].rect.midleft[1] -30))
         pygame.display.update()
         clock.tick(40)

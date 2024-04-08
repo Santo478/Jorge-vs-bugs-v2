@@ -7,29 +7,28 @@ mixer.init()
 sound = pygame.mixer.Sound('assets/audio/Sound/ExitpauseMenu.wav')
 sound.set_volume(0.2)
 
-def PauseMenu(screen):
+def StageComplete(screen, next_stage):
     from .main_menu import MainMenu
-    pygame.display.set_caption("Pause Menu")
+    from .stage2 import StartScene2
+    pygame.display.set_caption("Stage Completed")
     '''Cambiar musica'''
     pygame.mixer.music.pause()
-    '''Botones'''
-    
+
     from funciones.button import Button
     SideButton = pygame.transform.scale(pygame.image.load("assets/Buttons/SideButton.png"), (70,70))
-    ResumeImg = pygame.image.load('assets/Buttons/ResumeButton.png').convert_alpha()
+    ContinueImg = pygame.image.load('assets/Buttons/ContinueButton.png').convert_alpha()
     MainMenuImg = pygame.image.load('assets/Buttons/MainMenuButton.png').convert_alpha()
-    
-    buttons = [Button(500, 300, ResumeImg, "Resume"),
+
+    buttons = [Button(500, 300, ContinueImg, "Continue"),
                Button(500, 450, MainMenuImg, "Main")]
     selected_index = 0
     buttons[selected_index].selected = True
-
 
     run = True
 
     while run:
         screen.fill((61, 105, 132))
-
+        
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.display.quit()
@@ -50,10 +49,13 @@ def PauseMenu(screen):
                     selected_index = (selected_index + 1) % len(buttons)
                     buttons[selected_index].selected = True
                 elif event.key == pygame.K_RETURN:
-                    if buttons[selected_index].use == "Resume":
+                    if buttons[selected_index].use == "Continue":
                         buttons[selected_index].play_sound(2)
                         pygame.time.delay(200)
-                        return
+                        if next_stage == 2:
+                            StartScene2(screen)
+                        elif next_stage == 3:
+                            pass
                     elif buttons[selected_index].use == "Main":
                         buttons[selected_index].play_sound(2)
                         pygame.time.delay(200)
@@ -61,9 +63,7 @@ def PauseMenu(screen):
                         MainMenu()
         for button in buttons:
             button.draw(screen)
-
         screen.blit(SideButton, (270 ,buttons[selected_index].rect.midleft[1] -30))
         pygame.display.update()
-        
+
         pygame.display.update()
-    

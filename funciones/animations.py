@@ -29,6 +29,6 @@ class SpriteSheet():
         if self.frame >= len(self.animation_list):
             self.frame = 0
     
-    def screen_blit(self, screen, entity, size):
+    def screen_blit(self, screen, coords, size):
         resized = pygame.transform.scale(self.animation_list[self.frame], (size, size))
-        screen.blit(resized, entity.rect)
+        screen.blit(resized, coords)
