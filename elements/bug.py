@@ -38,3 +38,6 @@ class Enemy(pygame.sprite.Sprite):
             self.kill()
             return 100
         return 0
+    
+    def decrease_speed(self):
+        self.speed -= 2

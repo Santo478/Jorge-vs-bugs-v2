@@ -60,6 +60,9 @@ def StartScene(screen):
     hurt_sound = pygame.mixer.Sound("assets/audio/Sound/Hurt.mp3")
     hurt_sound.set_volume(0.3)
 
+    Power_pickup = pygame.mixer.Sound('assets/audio/Sound/PowerUP.wav')
+    Power_pickup.set_volume(0.1)
+
 
 
     from elements.jorge import Player
@@ -67,6 +70,7 @@ def StartScene(screen):
     from elements.intro import Coins
     from elements.Bullet import Bullet
     from .death_screen import DeathScreen
+    from elements.power_ups import PowerUp
 
     pygame.display.set_caption("Stage 1")
     clock = pygame.time.Clock()
@@ -81,6 +85,7 @@ def StartScene(screen):
     ''' 4.- contenedores de enemigos y jugador'''
     enemies = pygame.sprite.Group()
     coins = pygame.sprite.Group()
+    powerups = pygame.sprite.Group()
     all_sprites = pygame.sprite.Group()
     bullets = pygame.sprite.Group()
     all_sprites.add(player)
@@ -97,6 +102,33 @@ def StartScene(screen):
     '''Zanax: Generador de Coins'''
     ADDCOIN = pygame.USEREVENT + 2
     pygame.time.set_timer(ADDCOIN, random.randint(7500,15000))
+
+    '''Generador power ups'''
+
+    ShieldPNG = pygame.image.load('assets/Extras/Shield.PNG').convert_alpha()
+    ShieldPNG_scaled = pygame.transform.scale(ShieldPNG,(35,35))
+    SpeedPNG = pygame.image.load('assets/Extras/PowerSpeed.png').convert_alpha()
+    SpeedPNG_scaled = pygame.transform.scale(SpeedPNG,(35,35))
+    SlownessPNG = pygame.image.load('assets/Extras/Snail.PNG').convert_alpha()
+    SlownessPNG_scaled = pygame.transform.scale(SlownessPNG,(35,35))
+
+    POWERUP_TYPES = ["speed", "shield", "slowness"]
+
+    def spawn_power_up():
+        x = 1000
+        y = random.randint(50,SCREEN_HEIGHT - 50)
+        powerup_type = random.choice(POWERUP_TYPES)
+        if powerup_type == "speed":
+            powerup = PowerUp(x, y, powerup_type, SpeedPNG_scaled)
+        elif powerup_type == "shield":
+            powerup = PowerUp(x, y, powerup_type, ShieldPNG_scaled)
+        elif powerup_type == "slowness":
+            powerup = PowerUp(x, y, powerup_type, SlownessPNG_scaled)
+        powerups.add(powerup)
+        
+
+    SPAWN_POWERUP_EVENT = pygame.USEREVENT + 3
+    pygame.time.set_timer(SPAWN_POWERUP_EVENT, random.randint(500,1000))
 
     ''' hora de hacer el gameloop '''
     running = True
@@ -163,6 +195,9 @@ def StartScene(screen):
                     new_coins = Coins(SCREEN_WIDTH, SCREEN_HEIGHT)
                     coins.add(new_coins)
 
+            elif event.type == SPAWN_POWERUP_EVENT:
+                spawn_power_up()
+
         #background scroller
 
         for i in range(2):
@@ -204,11 +239,13 @@ def StartScene(screen):
             entity.update()
             screen.blit(entity.surf, entity.rect)
             shoot_state = entity.update()
+        for entity in powerups:
+            entity.update()
 
         #COLLIDE DE ENEMIGOS
         if player.is_dead == False:
             if pygame.sprite.spritecollide(player, enemies, False):   
-                if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask):
+                if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask) and player.shield == False:
                     player.is_dead = True
                     player.lives -= 1
                     hurt_sound.play()
@@ -233,6 +270,17 @@ def StartScene(screen):
                 puntaje += 150
                 hurt_sound.play()
                 shoot_state = False
+
+        
+        #COLLIDE DE POWER UPS
+
+        if pygame.sprite.spritecollide(player, powerups, False):   
+            if pygame.sprite.spritecollide(player, powerups, True, pygame.sprite.collide_mask):
+                for powerup in pygame.sprite.spritecollide(player, powerups, True):
+                    powerup.apply_effect(enemies.sprites(),player)
+                    powerup.play_pickup()
+        for powerup in powerups.sprites():
+            screen.blit(powerup.image, powerup.rect)
 
         #DISPLAY VIDAS
         for i in range(player.lives):
