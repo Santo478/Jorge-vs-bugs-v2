@@ -58,9 +58,6 @@ def StartScene(screen):
     from elements.intro import Coins
     from .death_screen import DeathScreen
     from elements.power_ups import PowerUp
-    from elements.power_ups import SpeedPowerUp
-    from elements.power_ups import ShieldPowerUp
-    from elements.power_ups import SlownessPowerUp
 
     pygame.display.set_caption("Game")
     clock = pygame.time.Clock()
@@ -75,7 +72,7 @@ def StartScene(screen):
     ''' 4.- contenedores de enemigos y jugador'''
     enemies = pygame.sprite.Group()
     coins = pygame.sprite.Group()
-    power_ups = pygame.sprite.Group()
+    powerups = pygame.sprite.Group()
     all_sprites = pygame.sprite.Group()
     all_sprites.add(player)
 
@@ -90,21 +87,30 @@ def StartScene(screen):
 
     '''Generador power ups'''
 
+    ShieldPNG = pygame.image.load('assets/Extras/Shield.PNG').convert_alpha()
+    ShieldPNG_scaled = pygame.transform.scale(ShieldPNG,(35,35))
+    SpeedPNG = pygame.image.load('assets/Extras/PowerSpeed.png').convert_alpha()
+    SpeedPNG_scaled = pygame.transform.scale(SpeedPNG,(35,35))
+    SlownessPNG = pygame.image.load('assets/Extras/Snail.PNG').convert_alpha()
+    SlownessPNG_scaled = pygame.transform.scale(SlownessPNG,(35,35))
+
     POWERUP_TYPES = ["speed", "shield", "slowness"]
 
     def spawn_power_up():
-        x = random.randrange(SCREEN_WIDTH)
-        y = random.randrange(SCREEN_HEIGHT)
+        x = 1000
+        y = random.randint(50,SCREEN_HEIGHT - 50)
         powerup_type = random.choice(POWERUP_TYPES)
         if powerup_type == "speed":
-            powerup = SpeedPowerUp(x, y)
+            powerup = PowerUp(x, y, powerup_type, SpeedPNG_scaled)
         elif powerup_type == "shield":
-            powerup = ShieldPowerUp(x, y)
-        elif powerup_type == "health":
-            powerup = SlownessPowerUp(x, y)
-        power_ups.add(powerup)
+            powerup = PowerUp(x, y, powerup_type, ShieldPNG_scaled)
+        elif powerup_type == "slowness":
+            powerup = PowerUp(x, y, powerup_type, SlownessPNG_scaled)
+        powerups.add(powerup)
+        
 
     SPAWN_POWERUP_EVENT = pygame.USEREVENT + 3
+    pygame.time.set_timer(SPAWN_POWERUP_EVENT, random.randint(100,300))
 
     ''' hora de hacer el gameloop '''
     running = True
@@ -160,12 +166,9 @@ def StartScene(screen):
                 if event.type == ADDCOIN:
                     new_coins = Coins(SCREEN_WIDTH, SCREEN_HEIGHT)
                     coins.add(new_coins)
-                
-        if pygame.time.get_ticks() % random.randint(10000, 20000) == 0:
-            spawn_power_up()
-        
-        for powerup in power_ups:
-            screen.blit(powerup.image, powerup.rect)
+
+            elif event.type == SPAWN_POWERUP_EVENT:
+                spawn_power_up()
 
         #background scroller
         for i in range(2):
@@ -200,12 +203,13 @@ def StartScene(screen):
         for entity in enemies:
             score = entity.update()
             puntaje += score
-        power_ups.update()
+        for entity in powerups:
+            entity.update()
 
         #COLLIDE DE ENEMIGOS
         if player.is_dead == False:
             if pygame.sprite.spritecollide(player, enemies, False):   
-                if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask):
+                if pygame.sprite.spritecollide(player, enemies, False, pygame.sprite.collide_mask) and player.shield == False:
                     player.is_dead = True
                     player.lives -= 1
                     hurt_sound.play()
@@ -226,14 +230,13 @@ def StartScene(screen):
         
         #COLLIDE DE POWER UPS
 
-        collided_powerups = pygame.sprite.spritecollide(player, power_ups, True)
-        for powerup in collided_powerups:
-            if isinstance(powerup, SpeedPowerUp):
-                powerup.apply_effect(player)
-            elif isinstance(powerup, SlownessPowerUp):
-                powerup.apply_effect(new_enemy)
-            elif isinstance(powerup, ShieldPowerUp):
-                powerup.apply_effect(player)
+        if pygame.sprite.spritecollide(player, powerups, False):   
+            if pygame.sprite.spritecollide(player, powerups, True, pygame.sprite.collide_mask):
+                for powerup in pygame.sprite.spritecollide(player, powerups, True):
+                    powerup.apply_effect(enemies.sprites(),player)
+                    powerup.play_pickup()
+        for powerup in powerups.sprites():
+            screen.blit(powerup.image, powerup.rect)
 
         #DISPLAY VIDAS
         for i in range(player.lives):

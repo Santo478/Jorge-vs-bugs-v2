@@ -58,7 +58,7 @@ class Player(pygame.sprite.Sprite):
             self.is_dead = False
             self.dead_countdown = 120
 
-    def increase_speed(self, factor):
+    def increase_speed(self):
         self.speed *= 1.5
 
     def add_shield(self):
