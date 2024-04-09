@@ -23,4 +23,4 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x += self.speed
         if self.rect.right > 1050:
             self.kill()
-            return(False)
+            return("False")
