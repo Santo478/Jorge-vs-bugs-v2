@@ -128,7 +128,7 @@ def StartScene(screen):
         
 
     SPAWN_POWERUP_EVENT = pygame.USEREVENT + 3
-    pygame.time.set_timer(SPAWN_POWERUP_EVENT, random.randint(100,300))
+    pygame.time.set_timer(SPAWN_POWERUP_EVENT, random.randint(500,1000))
 
     ''' hora de hacer el gameloop '''
     running = True
