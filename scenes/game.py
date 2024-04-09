@@ -142,12 +142,14 @@ def StartScene(screen):
     charge_sheet_image = pygame.image.load('assets/Extras/RechargeSheet.png').convert_alpha()
     sprite_sheets = [SpriteSheet(bug_sheet_image, 3, 100, 32, 32),
                     SpriteSheet(jorge_sheet_image, 2, 75, 50, 50),
-                    SpriteSheet(coin_sheet_image, 8, 85, 30, 30),
-                    SpriteSheet(charge_sheet_image, 10, 500, 25, 25)]
+                    SpriteSheet(coin_sheet_image, 8, 85, 30, 30),]
+    sprita_cheta = [SpriteSheet(charge_sheet_image, 10, 500, 25, 25)]
 
     for i in sprite_sheets:
         i.get_frames()
         i.last_update = pygame.time.get_ticks()
+    for i in sprita_cheta:
+        i.get_frames() 
 
     frame_num = 0
     '''Control de Balas'''
@@ -178,6 +180,7 @@ def StartScene(screen):
                         pass
                 if event.key == pygame.K_SPACE:
                     if shoot_state == False:
+                        if animate == False:
                             last = pygame.time.get_ticks()
                             bullet = Bullet(player.rect.centerx + 20, player.rect.centery + 2)
                             bullets.add(bullet)
@@ -204,9 +207,14 @@ def StartScene(screen):
 
         #background scroller
 
+        now = pygame.time.get_ticks()
         if shoot_state =="Charge":
             if now - last >= 5000:
-                shoot_state = False
+                animate = False
+                screen.blit(FullPNG_scaled,(910,40))
+                for i in sprita_cheta:
+                    i.last_update = pygame.time.get_ticks()
+                    shoot_state = False
         for i in range(2):
             screen.blit(background_image, (i * 1000 + background_scrolls, 0))
 
@@ -218,11 +226,14 @@ def StartScene(screen):
         opacity_to_screen()
         screen.blit(font.render(str(puntaje), True, (255,255, 255)), (5,-3))
 
+        if now - last < 5000:
+            for i in sprita_cheta:
+                i.animate()
+                now = pygame.time.get_ticks()
 
-        if now - last <5000:
-            animate = True
-        elif now - last > 5000:
-            animate = False
+        if animate == True:
+            sprita_cheta[0].screen_blit(screen,[910,40],40)
+
         #animacion sprite sheets
         for i in sprite_sheets:
             i.animate()
@@ -238,7 +249,7 @@ def StartScene(screen):
         for coin in coins:
             sprite_sheets[2].screen_blit(screen, coin.rect, 30)
         if animate == True:
-            sprite_sheets[3].screen_blit(screen,[910,40],40)
+            sprita_cheta[0].screen_blit(screen,[910,40],40)
         elif animate == False:
             screen.blit(FullPNG_scaled,(910,40))
             
@@ -310,7 +321,7 @@ def StartScene(screen):
             screen.blit(VidasPNG_scaled,(770 + 40*i, 40))
 
         
-        if puntaje >= 1000:
+        if puntaje >= 25000:
             from .StageComplete import StageComplete
             StageComplete(screen, 2)
 

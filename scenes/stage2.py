@@ -77,7 +77,7 @@ def StartScene2(screen):
 
     frame_num = 0
     '''Control de Balas'''
-    shoot_state = False
+    shoot_state = "Charge"
 
     running = True
     music_playing = False
@@ -104,7 +104,7 @@ def StartScene2(screen):
                     else:
                         pass
                 if event.key == pygame.K_SPACE:
-                    if shoot_state == False:
+                    if shoot_state == "Charge":
                             # Cuando se presiona la tecla espacio, se dispara una bala desde la posición del jugador
                             bullet = Bullet(player.rect.centerx + 20, player.rect.centery + 2)
                             bullets.add(bullet)
@@ -193,7 +193,7 @@ def StartScene2(screen):
                 puntaje += 150
                 bug_kill += 1
                 hurt_sound.play()
-                shoot_state = False
+                shoot_state = "Charge"
 
         #DISPLAY VIDAS
         for i in range(player.lives):
