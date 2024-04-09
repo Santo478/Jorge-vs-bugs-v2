@@ -63,6 +63,8 @@ def StartScene(screen):
     Power_pickup = pygame.mixer.Sound('assets/audio/Sound/PowerUP.wav')
     Power_pickup.set_volume(0.1)
 
+    pickup_sound = pygame.mixer.Sound("assets/audio/Sound/PowerUp.wav")
+    pickup_sound.set_volume(0.2)
 
 
     from elements.jorge import Player
@@ -128,7 +130,7 @@ def StartScene(screen):
         
 
     SPAWN_POWERUP_EVENT = pygame.USEREVENT + 3
-    pygame.time.set_timer(SPAWN_POWERUP_EVENT, random.randint(10000,20000))
+    pygame.time.set_timer(SPAWN_POWERUP_EVENT, random.randint(10000, 20000))
 
     ''' hora de hacer el gameloop '''
     running = True
@@ -276,11 +278,16 @@ def StartScene(screen):
         
         #COLLIDE DE POWER UPS
 
-        if pygame.sprite.spritecollide(player, powerups, False):   
-            if pygame.sprite.spritecollide(player, powerups, True, pygame.sprite.collide_mask):
-                for powerup in pygame.sprite.spritecollide(player, powerups, True):
-                    powerup.apply_effect(enemies.sprites(),player)
-                    powerup.play_pickup()
+        if pygame.sprite.spritecollide(player, powerups, False):
+            pickup_sound.play()   
+            for powerup in powerups:
+                if powerup.type == "slowness":
+                    for enemy in enemies:
+                        powerup.apply_effect(enemy, player)
+                else:
+                    powerup.apply_effect(enemies, player)
+                powerup.kill()
+
         for powerup in powerups.sprites():
             screen.blit(powerup.image, powerup.rect)
 
