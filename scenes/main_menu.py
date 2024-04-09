@@ -66,16 +66,6 @@ def MainMenu():
         screen.blit(background_image, [0,0])
         screen.blit(opacity_surface, (0,0))
         opacity_to_screen()
-
-        '''if range_bool:
-            range += 1
-        elif range_bool == False:
-            range -= 1
-        if range == 20:
-            range_bool = False
-        if range == -20:
-            range_bool = True
-        '''
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -105,6 +95,8 @@ def MainMenu():
                     elif buttons[selected_index].use == "Tutorial":
                         buttons[selected_index].play_sound(2)
                         pygame.time.delay(300)
+                elif event.key == pygame.K_SPACE:
+                    StartScene3(screen)
         for button in buttons:
             button.draw(screen)
 

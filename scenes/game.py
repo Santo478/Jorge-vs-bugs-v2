@@ -37,11 +37,6 @@ VidasPNG_scaled = pygame.transform.scale(VidasPNG, (40,40))
 FullPNG = pygame.image.load('assets/Extras/FullCharge.png').convert_alpha()
 FullPNG_scaled = pygame.transform.scale(FullPNG, (40,40))
 
-#Ajustador de opacity
-opacity_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
-def opacity_to_screen():
-    pygame.draw.rect(opacity_surface, (0, 0, 0, 55), (0,0,15 + 32*len,30))
-
 
 def StartScene(screen):
     background_scrolls = 0
@@ -315,7 +310,7 @@ def StartScene(screen):
             screen.blit(VidasPNG_scaled,(770 + 40*i, 40))
 
         
-        if puntaje >= 25000:
+        if puntaje >= 1000:
             from .StageComplete import StageComplete
             StageComplete(screen, 2)
 

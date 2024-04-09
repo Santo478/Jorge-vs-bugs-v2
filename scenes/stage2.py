@@ -59,7 +59,7 @@ def StartScene2(screen):
 
     puntaje = 0
     bug_kill = 0
-    font = pygame.font.Font('freesansbold.ttf', 32)
+    font = pygame.font.Font('assets/Fontxd.otf', 16)
 
     '''Animaciones'''
     from funciones.animations import SpriteSheet
@@ -81,6 +81,10 @@ def StartScene2(screen):
 
     running = True
     music_playing = False
+
+    opacity_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+    def opacity_to_screen():
+        pygame.draw.rect(opacity_surface, (0, 0, 0, 155), (0,0,95 + 15*len(str(bug_kill)),30))
 
     while running:
         frame_num += 1
@@ -127,9 +131,10 @@ def StartScene2(screen):
         if abs(background_scrolls) > 1000:
             background_scrolls = 0
         
-
-        screen.blit(font.render(str(puntaje), True, (255,255,255), (0,0,0)), (0,0))
-        screen.blit(font.render(str(bug_kill), True, (255,255,255), (0,0,0)), (100,100))
+        screen.blit(opacity_surface, (0,0))
+        opacity_to_screen()
+        #screen.blit(font.render(str(puntaje), True, (255,255,255), (0,0,0)), (0,0))
+        screen.blit(font.render(f"kills: {bug_kill}", True, (255,255,255)), (10,0))
 
         #animacion sprite sheets
         for i in sprite_sheets:

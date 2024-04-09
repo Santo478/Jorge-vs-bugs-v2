@@ -58,7 +58,7 @@ def StartScene3(screen):
     bullets = pygame.sprite.Group()
 
     puntaje = 0
-    font = pygame.font.Font('freesansbold.ttf', 32)
+    font = pygame.font.Font('assets/Fontxd.otf', 16)
 
     '''Animaciones'''
     from funciones.animations import SpriteSheet
@@ -77,9 +77,13 @@ def StartScene3(screen):
     frame_num = 0
     '''Control de Balas'''
     shoot_state = False
-
+    last_update = pygame.time.get_ticks()
     running = True
     music_playing = False
+
+    opacity_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+    def opacity_to_screen():
+        pygame.draw.rect(opacity_surface, (0, 0, 0, 170), (0,0,220,40))
 
     while running:
         frame_num += 1
@@ -126,8 +130,9 @@ def StartScene3(screen):
         if abs(background_scrolls) > 1000:
             background_scrolls = 0
         
-
-        screen.blit(font.render(str(puntaje), True, (255,255,255), (0,0,0)), (0,0))
+        screen.blit(opacity_surface, (0,0))
+        opacity_to_screen()
+        screen.blit(font.render(f"Survive for: {60 + (last_update - pygame.time.get_ticks()) // 1000}", True, (255,255,255)), (5,3))
 
         #animacion sprite sheets
         for i in sprite_sheets:
