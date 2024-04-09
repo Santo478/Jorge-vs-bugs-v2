@@ -35,7 +35,7 @@ background_imageRed = pygame.transform.scale(background_image4, (SCREEN_WIDTH, S
 VidasPNG = pygame.image.load('assets/Extras/Heart.png').convert_alpha()
 VidasPNG_scaled = pygame.transform.scale(VidasPNG, (40,40))
 FullPNG = pygame.image.load('assets/Extras/FullCharge.png').convert_alpha()
-FullPNG_scaled = pygame.transform.scale(VidasPNG, (40,40))
+FullPNG_scaled = pygame.transform.scale(FullPNG, (40,40))
 
 #Ajustador de opacity
 opacity_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
@@ -142,9 +142,11 @@ def StartScene(screen):
     bug_sheet_image = pygame.image.load("assets/skins/bugs/BugSheet1.png").convert_alpha()
     jorge_sheet_image = pygame.image.load("assets/skins/Jorge/JorgeVJSheet.png").convert_alpha()
     coin_sheet_image = pygame.image.load('assets/Extras/IntroCoinsSheet.png').convert_alpha()
+    charge_sheet_image = pygame.image.load('assets/Extras/RechargeSheet.png').convert_alpha()
     sprite_sheets = [SpriteSheet(bug_sheet_image, 3, 100, 32, 32),
                     SpriteSheet(jorge_sheet_image, 2, 75, 50, 50),
-                    SpriteSheet(coin_sheet_image, 8, 85, 30, 30),]
+                    SpriteSheet(coin_sheet_image, 8, 85, 30, 30),
+                    SpriteSheet(charge_sheet_image, 10, 500, 25, 25)]
 
     for i in sprite_sheets:
         i.get_frames()
@@ -156,6 +158,8 @@ def StartScene(screen):
 
     '''Loop principal'''
     last = -5000
+    now = 0
+    animate = False
 
     while running:
         frame_num += 1
@@ -176,9 +180,12 @@ def StartScene(screen):
                     else:
                         pass
                 if event.key == pygame.K_SPACE:
+                    if shoot_state == False:
+                            last = pygame.time.get_ticks()
                             bullet = Bullet(player.rect.centerx + 20, player.rect.centery + 2)
                             bullets.add(bullet)
                             shoot_state = True
+                            animate = True
             elif event.type == QUIT:
                 pygame.display.quit()
                 pygame.quit()
@@ -200,7 +207,6 @@ def StartScene(screen):
 
         if shoot_state =="Charge":
             if now - last >= 5000:
-                last = pygame.time.get_ticks()
                 shoot_state = False
         for i in range(2):
             screen.blit(background_image, (i * 1000 + background_scrolls, 0))
@@ -213,6 +219,11 @@ def StartScene(screen):
         opacity_to_screen()
         screen.blit(font.render(str(puntaje), True, (255,255, 255)), (5,-3))
 
+
+        if now - last <5000:
+            animate = True
+        elif now - last > 5000:
+            animate = False
         #animacion sprite sheets
         for i in sprite_sheets:
             i.animate()
@@ -227,10 +238,9 @@ def StartScene(screen):
             sprite_sheets[0].screen_blit(screen, entity.rect, entity.size)
         for coin in coins:
             sprite_sheets[2].screen_blit(screen, coin.rect, 30)
-        if shoot_state == "Charge":
-            if now - last <5000:
-                sprite_sheets[3].screen_blit(screen,[910,40],40)
-        elif shoot_state == "False":
+        if animate == True:
+            sprite_sheets[3].screen_blit(screen,[910,40],40)
+        elif animate == False:
             screen.blit(FullPNG_scaled,(910,40))
             
         #actualizar objetos
