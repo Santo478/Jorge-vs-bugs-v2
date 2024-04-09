@@ -250,7 +250,7 @@ def StartScene(screen):
             entity.update()
 
         #TickSearcher
-        Now = pygame.time.get_ticks()
+        now = pygame.time.get_ticks()
         #COLLIDE DE ENEMIGOS
         if player.is_dead == False:
             if pygame.sprite.spritecollide(player, enemies, False):   
