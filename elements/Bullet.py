@@ -1,32 +1,26 @@
 import pygame
-import random
 from pygame.locals import (RLEACCEL)
 
-BUGpng = pygame.image.load('assets/skins/bugs/bug.png').convert_alpha()
-BUGpng_scaled = pygame.transform.scale(BUGpng, (64,64))
+# Definición de colores
+
+Bulletpng = pygame.image.load('assets/Extras/Bullets.png').convert_alpha()
+Bulletpng_scaled = pygame.transform.scale(Bulletpng, (45,27))
 
 
 class Bullet(pygame.sprite.Sprite):
-
-    def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT):
-        # nos permite invocar métodos o atributos de Sprite
-        super(Bullet, self).__init__()
-        self.surf = BUGpng_scaled
+    def __init__(self, x, y):
+        super().__init__()
+        self.surf = Bulletpng_scaled
 
         self.mask = pygame.mask.from_surface(self.surf)
 
-        self.surf.set_colorkey((0,0,0), RLEACCEL)
-        self.screen_width = SCREEN_WIDTH
-        self.screen_height = SCREEN_HEIGHT
-        self.rect = self.surf.get_rect(
-            center = (
-                random.randint(150,800),
-                random.randint(50, 650),
-            )
-        )
+        self.surf.set_colorkey((255,255,255), RLEACCEL)
+        self.rect = self.surf.get_rect()
+        self.rect.center = (x, y)
+        self.speed = 10
+
     def update(self):
-        self.rect.move_ip(10,0)
-        if self.rect.right > 1000:
+        self.rect.x += self.speed
+        if self.rect.right > 1050:
             self.kill()
-            return 100
-        return 0
+            return(False)

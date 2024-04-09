@@ -13,7 +13,7 @@ def DeathScreen(screen):
     pygame.display.set_caption("You Died")
     '''Cambiar musica'''
     pygame.mixer.music.pause()
-
+    SideButton = pygame.transform.scale(pygame.image.load("assets/Buttons/SideButton.png"), (70,70))
     RetryImg = pygame.image.load('assets/Buttons/RetryButton.png').convert_alpha()
     MainMenuImg = pygame.image.load('assets/Buttons/MainMenuButton.png').convert_alpha()
 
@@ -30,7 +30,7 @@ def DeathScreen(screen):
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.display.quit()
-                return pygame.quit()
+                pygame.quit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     buttons[selected_index].play_sound(1)
@@ -53,5 +53,8 @@ def DeathScreen(screen):
                         return False
         for button in buttons:
             button.draw(screen)
+        
+        screen.blit(SideButton, (270 ,buttons[selected_index].rect.midleft[1] -30))
+        pygame.display.update()
         
         pygame.display.update()
