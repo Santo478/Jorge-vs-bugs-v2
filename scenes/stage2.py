@@ -194,9 +194,9 @@ def StartScene2(screen):
         for i in range(player.lives):
             screen.blit(VidasPNG_scaled,(820 + 40*i, 40))
         
-        if bug_kill >= 25:
+        if bug_kill >= 30:
             from .StageComplete import StageComplete
-            StageComplete(screen, 2)
+            StageComplete(screen, 3)
 
         
         pygame.display.flip()

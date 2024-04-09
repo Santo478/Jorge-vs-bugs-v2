@@ -38,7 +38,7 @@ VidasPNG_scaled = pygame.transform.scale(VidasPNG, (40,40))
 #Ajustador de opacity
 opacity_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
 def opacity_to_screen():
-    pygame.draw.rect(opacity_surface, (0, 0, 0, 55), (0,0,1000,700))
+    pygame.draw.rect(opacity_surface, (0, 0, 0, 55), (0,0,15 + 32*len,30))
 
 
 def StartScene(screen):
@@ -88,7 +88,11 @@ def StartScene(screen):
     
     '''texto? tal vez'''
     puntaje = 0
-    font = pygame.font.Font('freesansbold.ttf', 32)
+    opacity_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+    def opacity_to_screen():
+        pygame.draw.rect(opacity_surface, (0, 0, 0, 155), (0,0,15 + 16*len(str(puntaje)),30))
+
+    font = pygame.font.Font('assets/Fontxd.otf', 16)
 
     '''Zanax: Generador de Coins'''
     ADDCOIN = pygame.USEREVENT + 2
@@ -165,8 +169,9 @@ def StartScene(screen):
         if abs(background_scrolls) > 1000:
             background_scrolls = 0
         
-
-        screen.blit(font.render(str(puntaje), True, (255,255,255), (0,0,0)), (0,0))
+        screen.blit(opacity_surface, (0,0))
+        opacity_to_screen()
+        screen.blit(font.render(str(puntaje), True, (255,255, 255)), (5,-3))
 
         #animacion sprite sheets
         for i in sprite_sheets:
@@ -231,9 +236,10 @@ def StartScene(screen):
             screen.blit(VidasPNG_scaled,(820 + 40*i, 40))
 
         
-        if puntaje >= 10000:
+        if puntaje >= 25000:
             from .StageComplete import StageComplete
             StageComplete(screen, 2)
+
 
         pygame.display.flip()
         clock.tick(40)

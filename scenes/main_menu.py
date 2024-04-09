@@ -34,18 +34,17 @@ def MainMenu():
 
     PlayImg = pygame.image.load('assets/Buttons/PlayButton.png').convert_alpha()
     QuitImg = pygame.image.load('assets/Buttons/QuitButton.png').convert_alpha()
+    TutorialImg = pygame.image.load("assets/Buttons/TutorialButton.PNG").convert_alpha()
     
-    buttons = [Button(500, 300, PlayImg, "Play"), 
-               Button(500, 450, QuitImg, "Quit")]
+    buttons = [Button(500, 300, PlayImg, "Play"),
+               Button(500, 450, TutorialImg, "Tutorial"),
+               Button(500, 600, QuitImg, "Quit")]
     selected_index = 0
     buttons[selected_index].selected = True
 
 
     #variables
     run = True
-    button_pressed = False
-    button_timer = 0
-    
     music_played = True
 
     '''
@@ -103,8 +102,9 @@ def MainMenu():
                         pygame.time.delay(700)
                         pygame.quit()
                         run = False
-                elif event.key == pygame.K_SPACE:
-                    StartScene3(screen)
+                    elif buttons[selected_index].use == "Tutorial":
+                        buttons[selected_index].play_sound(2)
+                        pygame.time.delay(300)
         for button in buttons:
             button.draw(screen)
 

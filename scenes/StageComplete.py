@@ -10,6 +10,7 @@ sound.set_volume(0.2)
 def StageComplete(screen, next_stage):
     from .main_menu import MainMenu
     from .stage2 import StartScene2
+    from .stage3 import StartScene3
     pygame.display.set_caption("Stage Completed")
     '''Cambiar musica'''
     pygame.mixer.music.pause()
@@ -55,7 +56,7 @@ def StageComplete(screen, next_stage):
                         if next_stage == 2:
                             StartScene2(screen)
                         elif next_stage == 3:
-                            pass
+                            StartScene3(screen)
                     elif buttons[selected_index].use == "Main":
                         buttons[selected_index].play_sound(2)
                         pygame.time.delay(200)
