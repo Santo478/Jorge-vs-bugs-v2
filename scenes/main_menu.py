@@ -12,7 +12,7 @@ SCREEN_HEIGHT = 700
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 background_image1 = pygame.image.load('assets//Backgrounds/portada.png').convert()
-background_image = pygame.transform.scale(background_image1, (1000,700))
+background_image = pygame.transform.scale(background_image1, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 pygame.mouse.set_visible(False)
 
@@ -36,9 +36,9 @@ def MainMenu():
     QuitImg = pygame.image.load('assets/Buttons/QuitButton.png').convert_alpha()
     TutorialImg = pygame.image.load("assets/Buttons/TutorialButton.PNG").convert_alpha()
     
-    buttons = [Button(500, 300, PlayImg, "Play"),
-               Button(500, 450, TutorialImg, "Tutorial"),
-               Button(500, 600, QuitImg, "Quit")]
+    buttons = [Button(SCREEN_WIDTH/2, 300, PlayImg, "Play"),
+               Button(SCREEN_WIDTH/2, 450, TutorialImg, "Tutorial"),
+               Button(SCREEN_WIDTH/2, 600, QuitImg, "Quit")]
     selected_index = 0
     buttons[selected_index].selected = True
 

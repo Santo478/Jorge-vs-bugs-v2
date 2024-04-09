@@ -21,13 +21,13 @@ SCREEN_HEIGHT = 700
 
 '''background logic'''
 background_image1 = pygame.image.load('assets//Backgrounds/RepeatBG.png').convert()
-background_image = pygame.transform.scale(background_image1, (1000,700))
+background_image = pygame.transform.scale(background_image1, (SCREEN_WIDTH, SCREEN_HEIGHT))
 background_image2 = pygame.image.load('assets//Backgrounds/RepeatBGBlue.png').convert()
-background_imageBlue = pygame.transform.scale(background_image2, (1000,700))
+background_imageBlue = pygame.transform.scale(background_image2, (SCREEN_WIDTH, SCREEN_HEIGHT))
 background_image3 = pygame.image.load('assets//Backgrounds/RepeatBGYellow.png').convert()
-background_imageYellow = pygame.transform.scale(background_image3, (1000,700))
+background_imageYellow = pygame.transform.scale(background_image3, (SCREEN_WIDTH, SCREEN_HEIGHT))
 background_image4 = pygame.image.load('assets//Backgrounds/RepeatBGRed.png').convert()
-background_imageRed = pygame.transform.scale(background_image4, (1000,700))
+background_imageRed = pygame.transform.scale(background_image4, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 
 '''vidas'''
