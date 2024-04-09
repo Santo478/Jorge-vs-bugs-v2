@@ -110,7 +110,7 @@ def StartScene(screen):
     coin_sheet_image = pygame.image.load('assets/Extras/IntroCoinsSheet.png').convert_alpha()
     sprite_sheets = [SpriteSheet(bug_sheet_image, 3, 100, 32, 32),
                     SpriteSheet(jorge_sheet_image, 2, 75, 50, 50),
-                    SpriteSheet(coin_sheet_image, 8, 85, 30, 30)]
+                    SpriteSheet(coin_sheet_image, 8, 85, 30, 30),]
 
     for i in sprite_sheets:
         i.get_frames()
@@ -121,6 +121,7 @@ def StartScene(screen):
     shoot_state = False
 
     '''Loop principal'''
+    last = 0
 
     while running:
         frame_num += 1
@@ -142,7 +143,9 @@ def StartScene(screen):
                         pass
                 if event.key == pygame.K_SPACE:
                     if shoot_state == False:
-                            # Cuando se presiona la tecla espacio, se dispara una bala desde la posición del jugador
+                        now = pygame.time.get_ticks()
+                        if now - last >= 4500:
+                            last = pygame.time.get_ticks()
                             bullet = Bullet(player.rect.centerx + 20, player.rect.centery + 2)
                             bullets.add(bullet)
                             shoot_state = True
@@ -243,3 +246,5 @@ def StartScene(screen):
 
         pygame.display.flip()
         clock.tick(40)
+
+        
