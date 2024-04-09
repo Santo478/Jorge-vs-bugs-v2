@@ -128,7 +128,7 @@ def StartScene(screen):
         
 
     SPAWN_POWERUP_EVENT = pygame.USEREVENT + 3
-    pygame.time.set_timer(SPAWN_POWERUP_EVENT, random.randint(500,1000))
+    pygame.time.set_timer(SPAWN_POWERUP_EVENT, random.randint(10000,20000))
 
     ''' hora de hacer el gameloop '''
     running = True
@@ -190,13 +190,15 @@ def StartScene(screen):
                 enemies.add(new_enemy)
                 all_sprites.add(new_enemy)
 
+            elif event.type == SPAWN_POWERUP_EVENT:
+                spawn_power_up()
+
             elif puntaje >= 10:
                 if event.type == ADDCOIN:
                     new_coins = Coins(SCREEN_WIDTH, SCREEN_HEIGHT)
                     coins.add(new_coins)
 
-            elif event.type == SPAWN_POWERUP_EVENT:
-                spawn_power_up()
+            
 
         #background scroller
 
